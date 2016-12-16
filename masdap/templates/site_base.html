@@ -134,7 +134,36 @@
 </div>
 {% endblock middle %}
 
-{% block footer %}	
+{% block footer %}
+<div id="feedback">
+	<div id="feedback-form" style='display:none;' class="col-xs-4 col-md-4 panel panel-default">
+		<form method="POST" action="/feedback" class="form panel-body" role="form">
+			<div class="form-group">
+				<select class="form-control">
+					<option>Broken link</option>
+					<option>Content issue</option>
+					<option>Design issue</option>
+					<option>Request a feature</option>
+					<option>Other</option>
+				</select>
+			</div>
+			<div class="checkbox">
+				<label>
+					<input type="checkbox"> My comments are for the current web page
+				</label>
+			</div>
+			<div class="form-group">
+				<input class="form-control" name="email" autofocus placeholder="Your e-mail (optional)" type="email" />
+			</div>
+			<div class="form-group">
+				<textarea class="form-control" name="body" required placeholder="Please write your feedback here..." rows="5"></textarea>
+			</div>
+			<button class="btn btn-primary pull-right" type="submit">Submit</button>
+		</form>
+	</div>
+	<div id="feedback-tab">Feedback</div>
+</div>
+
 <section id="contact">
 	<div class="container">
 		<div class="row">
@@ -202,7 +231,9 @@
 				<p><img src="/static/img/logo.png"></p>
 				<ul class="list-unstyled">
 					<li>Malawi Spatial Data Platform</li>
-					<li>Powered by GeoNode</li>
+					<li><small>Powered by GeoNode</small></li>
+					<li><small>Image Copyright: ESA</small></li>
+					<li><small>Lake Malawi, Great Rift Valley</small></li>
 				</ul>
 	            <label class="hidden">{% trans "Language" %}</label>
 	            {% if csrf_token != "NOTPROVIDED" %}
@@ -227,6 +258,26 @@
 	<script type="text/javascript">
 		$(document).ready(function() {
 		  $(".select-language").select2();
+		});
+	</script>
+	<script type="text/javascript">
+		$(function() {
+			$("#feedback-tab").click(function() {
+				$("#feedback-form").toggle("slide");
+			});
+
+			$("#feedback-form form").on('submit', function(event) {
+				var $form = $(this);
+				$.ajax({
+					type: $form.attr('method'),
+					url: $form.attr('action'),
+					data: $form.serialize(),
+					success: function() {
+						$("#feedback-form").toggle("slide").find("textarea").val('');
+					}
+				});
+				event.preventDefault();
+			});
 		});
 	</script>
 {% endblock extra_script %}
