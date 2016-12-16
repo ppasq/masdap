@@ -6,7 +6,10 @@ MASDAP (Malawi Spatial Data Platform) is a GeoNode customization based on geonod
 Installation
 ------------
 
-Install the native dependencies for your platform.
+Install the native dependencies for your platform. You may need also to install these MASDAP specific dependencies.::
+
+    $ pip install pygdal==1.11.5.3 # Check version
+    $ pip install django-nocaptcha-recaptcha
 
 Install virtualenv and virtualenvwrapper, Create a local virtual environment for your project and install Django into it.::
 
