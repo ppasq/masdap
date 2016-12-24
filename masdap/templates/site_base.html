@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n avatar_tags %}
+{% load i18n avatar_tags feedback_widget %}
 
 {% block head %}
     {% if DEBUG_STATIC %}
@@ -14,6 +14,8 @@
     <link href="{{ STATIC_URL }}geonode/css/ext-compatibility.css?v={{ VERSION }}" rel="stylesheet" />
     <style type="text/css">[ng\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}</style>
     <link href="{{ STATIC_URL }}css/masdap.css" rel="stylesheet"/>
+	<!-- <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}feedback.css" />
+	<script type="text/javascript" src="{{ STATIC_URL }}feedback.js"></script> -->
     {% block extra_head %}
     {% endblock %}
 {% endblock %}
@@ -135,34 +137,8 @@
 {% endblock middle %}
 
 {% block footer %}
-<div id="feedback">
-	<div id="feedback-form" style='display:none;' class="col-xs-4 col-md-4 panel panel-default">
-		<form method="POST" action="/feedback" class="form panel-body" role="form">
-			<div class="form-group">
-				<select class="form-control">
-					<option>Broken link</option>
-					<option>Content issue</option>
-					<option>Design issue</option>
-					<option>Request a feature</option>
-					<option>Other</option>
-				</select>
-			</div>
-			<div class="checkbox">
-				<label>
-					<input type="checkbox"> My comments are for the current web page
-				</label>
-			</div>
-			<div class="form-group">
-				<input class="form-control" name="email" autofocus placeholder="Your e-mail (optional)" type="email" />
-			</div>
-			<div class="form-group">
-				<textarea class="form-control" name="body" required placeholder="Please write your feedback here..." rows="5"></textarea>
-			</div>
-			<button class="btn btn-primary pull-right" type="submit">Submit</button>
-		</form>
-	</div>
-	<div id="feedback-tab">Feedback</div>
-</div>
+
+{% feedback_widget %}
 
 <section id="contact">
 	<div class="container">
@@ -258,26 +234,6 @@
 	<script type="text/javascript">
 		$(document).ready(function() {
 		  $(".select-language").select2();
-		});
-	</script>
-	<script type="text/javascript">
-		$(function() {
-			$("#feedback-tab").click(function() {
-				$("#feedback-form").toggle("slide");
-			});
-
-			$("#feedback-form form").on('submit', function(event) {
-				var $form = $(this);
-				$.ajax({
-					type: $form.attr('method'),
-					url: $form.attr('action'),
-					data: $form.serialize(),
-					success: function() {
-						$("#feedback-form").toggle("slide").find("textarea").val('');
-					}
-				});
-				event.preventDefault();
-			});
 		});
 	</script>
 {% endblock extra_script %}
