@@ -84,12 +84,18 @@ INSTALLED_APPS = (
     'polymorphic',
     'guardian',
     
-    #Contact
+    # Contact
     'contact',
     'nocaptcha_recaptcha',
+    
+    # Feedback
+    'django_basic_feedback',
+    #'mailer',
+    #'feedback_form',
+    #'django_libs',
 
     # recaptcha on registration
-    'account_captcha'
+    'account_captcha',
 
 ) + GEONODE_APPS
 
