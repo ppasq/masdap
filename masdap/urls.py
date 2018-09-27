@@ -31,6 +31,8 @@ urlpatterns = [
    url(r'^/?$',
        TemplateView.as_view(template_name='site_index.html'),
        name='home'),
+   url(r'^account/signup/', include('account_captcha.urls')),
+   url(r'^contact/', include('contact.urls'))
    url(r'^cms/', include(wagtailadmin_urls)),
    url(r'^docs/', include(wagtaildocs_urls)),
    url(r'^blog/', include('puput.urls')),
