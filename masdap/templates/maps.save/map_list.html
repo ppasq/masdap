@@ -1,0 +1,49 @@
+{% extends "maps/map_base.html" %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block body_class %}maps{% endblock %}
+
+{% block title %}{% trans "Explore Maps" %}{% endblock %}
+{% block page-title %}
+  {% trans "Explore Maps" %}
+  <a class="btn btn-default pull-right" href="{% url "new_map" %}" role="button">{% trans "Create Map" %}</a>
+{% endblock %}
+
+{% block subheader %}
+<section id="subheader">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3">
+                <p><span ng-bind="'{{ facet_type | title }} found: ' + total_counts"></span></p>
+            </div>
+            <div class="col-md-9">
+                {% include "search/_sort_filters.html" %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block body %}
+  {% include "search/_search_content.html" %}
+  {% include "_bulk_permissions_form.html" %}
+{% endblock %}
+
+{% block extra_script %}
+{{ block.super }}
+  {% if GEONODE_SECURITY_ENABLED %}
+    {% include "_permissions_form_js.html" %}
+  {% endif %}
+  <script type="text/javascript">
+      {% if HAYSTACK_SEARCH %}
+          SEARCH_URL = '{% url 'api_get_search' api_name='api' resource_name='base' %}?type__in=map'
+      {% else %}
+          SEARCH_URL = '{% url 'api_dispatch_list' api_name='api' resource_name='maps' %}';
+      {% endif %}
+      FILTER_TYPE = 'map';
+  </script>
+  {% with include_spatial='true' %}
+  {% include 'search/search_scripts.html' %}
+  {% endwith %}
+{% endblock extra_script %}

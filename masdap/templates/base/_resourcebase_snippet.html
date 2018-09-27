@@ -1,0 +1,58 @@
+{% load i18n %}
+{% verbatim %}
+<div class="row resourcebase-snippet">
+  <div ng-if="results.length == 0" ng-cloak>
+    <h3>No content created yet.</h3>
+  </div>
+
+  <article ng-repeat="item in results" resource_id="{{ item.id }}" ng-cloak class="ng-cloak">
+    <div class="col-sm-3 item-thumb">
+      <a href="{{ item.detail_url }}">
+        <img ng-src="{{ item.thumbnail_url }}" />
+      </a>
+    </div>
+    <div class="col-sm-9 item-details">
+      <em ng-if="item.online && item.store_type == 'remoteStore'">
+        {% endverbatim %}
+        <span ng-if="item.online == true"><i class="fas fa-power-off text-success"></i> {% trans "Service is" %} {% trans "online" %}</span>
+        <span ng-if="item.online == false"><i class="fas fa-power-off text-danger"></i> {% trans "Service is" %} {% trans "offline" %}</span>
+        {% verbatim %}
+      </em>
+      <div class="alert alert-warning" ng-if="item.is_approved == false">PENDING APPROVAL</div>
+      <div class="alert alert-danger" ng-if="item.is_approved == true && item.is_published == false">UNPUBLISHED</div>
+      <p class="item-meta">
+        <i ng-if="item.store_type == 'remoteStore'" title="Remote Service" class="fas fa-link"></i>
+        <i ng-if="item.store_type == 'dataStore'" title="Vector Data" class="fas fa-draw-polygon"></i>
+        <i ng-if="item.store_type == 'coverageStore'" title="Raster Data" class="far fa-image"></i>
+        <i ng-if="item.store_type == 'dataset'" title="File/Dataset" class="far fa-file"></i>
+        <i ng-if="item.store_type == 'map'" title="Map" class="far fa-map"></i>
+        <span class="item-category" ng-if="item.group"><a href="/groups/group/{{ item.group }}/activity/">{{ item.group_name }}</a> </span>
+        <span class="item-category">{{ item.category__gn_description }} </span>
+        <span class="item-category" ng-if="item.has_time"><i class="far fa-clock" aria-hidden="true"></i>Temporal Serie</span>
+        <button
+          class="btn btn-default btn-xs pull-right"
+          ng-if="cart"
+          ng-click="cart.toggleItem(item)"
+          data-toggle="tooltip"
+          data-placement="bottom"
+          title="Select"><i ng-class="cart.getFaClass(item.id)" class="fas "></i></button>
+      </p>
+      <h4><a href="{{ item.detail_url }}">{{ item.title }}</a></h4>
+      <p class="abstract">{{ item.abstract | limitTo: 300 }}{{ item.abstract.length  > 300 ? '...' : ''}}</p>
+      <ul class="list-inline">
+        <li><a href="/people/profile/{{ item.owner__username }}"><i class="fas fa-user-circle"></i> {{ item.owner_name }}</a></li>
+        <li><a href="{{ item.detail_url }}#info"><i class="far fa-calendar"></i> {{ item.date|date:'d MMM y' }}</a></li>
+        <li><a href="{{ item.detail_url }}"><i class="fas fa-eye"></i> {{ item.popular_count }}</a></li>
+        <li><a href="{{ item.detail_url }}#share"><i class="fas fa-share"></i> {{ item.share_count }}</a></li>
+        <li><a href="{{ item.detail_url }}#rate"><i class="fas fa-star"></i> {{ item.rating }}</a></li>
+        <li><a ng-if="item.detail_url.indexOf('/layers/') > -1" href="{% endverbatim %}{% url "new_map" %}?layer={% verbatim %}{{ item.detail_url.substring(8) }}">
+          {% endverbatim %}
+          <i class="far fa-map"></i> {% trans "Create a Map" %}</a>
+          {% verbatim %}
+        </li>
+        <li><a ng-if="item.detail_url.indexOf('/maps/') > -1" href="/maps/{{item.id}}/view"><i class="far fa-map"></i> View Map</a></li>
+      </ul>
+    </div>
+  </article>
+</div>
+{% endverbatim %}

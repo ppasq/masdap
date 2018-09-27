@@ -25,7 +25,6 @@ from urlparse import urlparse, urlunparse
 # Load more settings from a file called local_settings.py if it exists
 try:
     from geonode.local_settings import *
-#    from masdap.local_settings import *
 except ImportError:
     from geonode.settings import *
 
@@ -36,7 +35,7 @@ DEBUG = os.environ.get('DEBUG', True)
 #
 PROJECT_NAME = 'masdap'
 
-# we need hostname for deployed 
+# we need hostname for deployed
 surl = urlparse(SITEURL)
 hostname = surl.hostname
 
@@ -388,3 +387,36 @@ LOGGING = {
             "handlers": ["console"], "level": "INFO", },
         },
     }
+
+INSTALLED_APPS = INSTALLED_APPS + (
+    'compressor',
+    'wagtail.wagtailforms',
+    'wagtail.wagtailredirects',
+    'wagtail.wagtailembeds',
+    'wagtail.wagtailsites',
+    'wagtail.wagtailusers',
+    'wagtail.wagtailsnippets',
+    'wagtail.wagtaildocs',
+    'wagtail.wagtailimages',
+    'wagtail.wagtailsearch',
+    'wagtail.wagtailadmin',
+    'wagtail.wagtailcore',
+    'wagtail.contrib.wagtailsitemaps',
+    'wagtail.contrib.wagtailroutablepage',
+    'modelcluster',
+    'blog',
+    'puput',
+    )
+
+MIDDLEWARE_CLASSES = MIDDLEWARE_CLASSES + (
+    'wagtail.wagtailcore.middleware.SiteMiddleware',
+    'wagtail.wagtailredirects.middleware.RedirectMiddleware',
+)
+
+WAGTAIL_SITE_NAME = 'MASDAP Blog'
+
+TEMPLATES[0]['DIRS'].insert(0,os.path.join(LOCAL_ROOT, "templates"))
+
+PUPUT_AS_PLUGIN = True
+
+MIGRATION_MODULES = {'puput': 'masdap.puput_migrations'}
